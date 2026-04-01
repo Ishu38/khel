@@ -1,13 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const CONTACT_INFO = {
-  name: 'Neil Shankar Ray',
-  address: 'C/o Mrs. Chinu Ray, 55/1 Jubilee Park, Tollygunge, Kolkata-33',
-  email: 'roychinu45@gmail.com',
-  phone: '+91 7001406831',
-};
-
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
@@ -20,241 +13,276 @@ export default function Contact() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <Link to="/" style={styles.backLink}>← Back to Home</Link>
-        <h1 style={styles.title}>Contact Us</h1>
-        <p style={styles.subtitle}>We'd love to hear from you</p>
-      </div>
-
-      <div style={styles.grid}>
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Get in Touch</h2>
-          
-          <div style={styles.infoItem}>
-            <span style={styles.infoIcon}>📍</span>
-            <div>
-              <h3 style={styles.infoLabel}>Address</h3>
-              <p style={styles.infoValue}>{CONTACT_INFO.address}</p>
-            </div>
-          </div>
-
-          <div style={styles.infoItem}>
-            <span style={styles.infoIcon}>👤</span>
-            <div>
-              <h3 style={styles.infoLabel}>Contact Person</h3>
-              <p style={styles.infoValue}>{CONTACT_INFO.name}</p>
-            </div>
-          </div>
-
-          <div style={styles.infoItem}>
-            <span style={styles.infoIcon}>📧</span>
-            <div>
-              <h3 style={styles.infoLabel}>Email</h3>
-              <p style={styles.infoValue}>{CONTACT_INFO.email}</p>
-            </div>
-          </div>
-
-          <div style={styles.infoItem}>
-            <span style={styles.infoIcon}>📱</span>
-            <div>
-              <h3 style={styles.infoLabel}>Phone</h3>
-              <p style={styles.infoValue}>{CONTACT_INFO.phone}</p>
-            </div>
-          </div>
+    <div style={s.page}>
+      <div style={s.container}>
+        {/* Header */}
+        <div style={s.header}>
+          <h1 style={s.title}>GET IN TOUCH.</h1>
+          <p style={s.subtitle}>We'd love to hear from you — feedback, partnerships, or just to say hi.</p>
         </div>
 
-        <div style={styles.card}>
-          <h2 style={styles.cardTitle}>Send a Message</h2>
-          <form onSubmit={handleSubmit} style={styles.form}>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Name</label>
-              <input
-                type="text"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                style={styles.input}
-                required
-              />
+        <div style={s.grid}>
+          {/* Info side */}
+          <div style={s.infoCol}>
+            {/* Creator */}
+            <div style={s.card}>
+              <div style={s.cardHeader}>
+                <div style={{ ...s.iconBadge, background: '#ddd6fe' }}>👤</div>
+                <div>
+                  <div style={s.cardLabel}>Creator</div>
+                  <div style={s.cardValue}>Neil Shankar Ray</div>
+                </div>
+              </div>
             </div>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Email</label>
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                style={styles.input}
-                required
-              />
-            </div>
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Message</label>
-              <textarea
-                value={form.message}
-                onChange={(e) => setForm({ ...form, message: e.target.value })}
-                style={styles.textarea}
-                rows="5"
-                required
-              />
-            </div>
-            <button type="submit" style={styles.button}>
-              {submitted ? 'Message Sent!' : 'Send Message'}
-            </button>
-          </form>
-        </div>
-      </div>
 
-      <div style={styles.mapSection}>
-        <h2 style={styles.mapTitle}>Find Us</h2>
-        <div style={styles.mapContainer}>
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3683.8877134562186!2d88.36753687368026!3d22.49840213567431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a0272b888c4e1db%3A0x1c8a2e1d5c8f5c8e!2s55%2F1%20Jubilee%20Park%2C%20Tollygunge%2C%20Kolkata%2C%20West%20Bengal%20700033!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin"
-            width="100%"
-            height="400"
-            style={{ border: 0 }}
-            allowFullScreen=""
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            title="Location Map"
-          />
+            {/* Institution */}
+            <div style={s.card}>
+              <div style={s.cardHeader}>
+                <div style={{ ...s.iconBadge, background: '#a7f3d0' }}>🎓</div>
+                <div>
+                  <div style={s.cardLabel}>Institution</div>
+                  <div style={s.cardValue}>IIT Patna</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Email */}
+            <div style={s.card}>
+              <div style={s.cardHeader}>
+                <div style={{ ...s.iconBadge, background: '#bae6fd' }}>📧</div>
+                <div>
+                  <div style={s.cardLabel}>Email</div>
+                  <a href="mailto:roychinu45@gmail.com" style={s.cardLink}>roychinu45@gmail.com</a>
+                </div>
+              </div>
+            </div>
+
+            {/* Phone */}
+            <div style={s.card}>
+              <div style={s.cardHeader}>
+                <div style={{ ...s.iconBadge, background: '#fde68a' }}>📱</div>
+                <div>
+                  <div style={s.cardLabel}>Phone</div>
+                  <a href="tel:+917001406831" style={s.cardLink}>+91 7001406831</a>
+                </div>
+              </div>
+            </div>
+
+            {/* Built with */}
+            <div style={s.builtWith}>
+              <span style={s.builtLabel}>Built with</span>
+              <div style={s.builtRow}>
+                <span style={s.techPill}>Claude AI</span>
+                <span style={s.techPill}>React</span>
+                <span style={s.techPill}>Node.js</span>
+                <span style={s.techPill}>FastAPI</span>
+                <span style={s.techPill}>MongoDB</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Form side */}
+          <div style={s.formCard}>
+            <h2 style={s.formTitle}>SEND A MESSAGE</h2>
+            <form onSubmit={handleSubmit} style={s.form}>
+              <div style={s.formGroup}>
+                <label style={s.label}>Name</label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })}
+                  className="input"
+                  placeholder="Your name"
+                  required
+                />
+              </div>
+              <div style={s.formGroup}>
+                <label style={s.label}>Email</label>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  className="input"
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
+              <div style={s.formGroup}>
+                <label style={s.label}>Message</label>
+                <textarea
+                  value={form.message}
+                  onChange={(e) => setForm({ ...form, message: e.target.value })}
+                  className="textarea"
+                  rows="5"
+                  placeholder="What's on your mind?"
+                  required
+                />
+              </div>
+              <button type="submit" style={s.submitBtn}>
+                {submitted ? 'MESSAGE SENT!' : 'SEND MESSAGE →'}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-const styles = {
+const s = {
+  page: {
+    background: '#0a0a0a',
+    minHeight: 'calc(100vh - var(--nav-height))',
+  },
   container: {
     maxWidth: '1100px',
     margin: '0 auto',
-    padding: '40px 20px',
-    fontFamily: 'system-ui, -apple-system, sans-serif',
+    padding: 'clamp(40px, 6vw, 80px) 20px',
   },
   header: {
-    textAlign: 'center',
-    marginBottom: '50px',
-  },
-  backLink: {
-    color: '#6366f1',
-    textDecoration: 'none',
-    fontSize: '14px',
-    display: 'inline-block',
-    marginBottom: '20px',
+    marginBottom: 'clamp(40px, 6vw, 60px)',
   },
   title: {
-    fontSize: '42px',
-    fontWeight: '700',
-    color: '#1f2937',
-    margin: '0 0 12px',
+    fontFamily: "'Inter', 'system-ui', sans-serif",
+    fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+    fontWeight: 900,
+    lineHeight: 1,
+    letterSpacing: '-0.03em',
+    color: '#fff',
+    textTransform: 'uppercase',
+    marginBottom: 'var(--space-3)',
   },
   subtitle: {
-    fontSize: '18px',
-    color: '#6b7280',
-    margin: 0,
+    fontSize: 'clamp(0.95rem, 1.5vw, 1.15rem)',
+    color: 'rgba(255,255,255,0.4)',
+    maxWidth: '460px',
+    lineHeight: 1.6,
   },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-    gap: '30px',
-    marginBottom: '50px',
+    gap: 'var(--space-8)',
+  },
+  infoCol: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 'var(--space-4)',
   },
   card: {
-    background: '#fff',
-    borderRadius: '16px',
-    padding: '32px',
-    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-    border: '1px solid #e5e7eb',
-  },
-  cardTitle: {
-    fontSize: '22px',
-    fontWeight: '600',
-    color: '#1f2937',
-    margin: '0 0 24px',
-  },
-  infoItem: {
     display: 'flex',
-    gap: '16px',
-    marginBottom: '20px',
+    alignItems: 'center',
+    padding: 'var(--space-5) var(--space-6)',
+    background: '#161616',
+    borderRadius: '20px',
+    border: '1px solid rgba(255,255,255,0.06)',
   },
-  infoIcon: {
-    fontSize: '24px',
-    width: '40px',
-    height: '40px',
+  cardHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'var(--space-4)',
+  },
+  iconBadge: {
+    width: '48px',
+    height: '48px',
+    borderRadius: '14px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: '#f3f4f6',
-    borderRadius: '10px',
+    fontSize: '1.4rem',
+    flexShrink: 0,
   },
-  infoLabel: {
-    fontSize: '12px',
-    color: '#6b7280',
-    margin: '0 0 4px',
+  cardLabel: {
+    fontSize: 'var(--fs-xs)',
+    color: 'rgba(255,255,255,0.35)',
     textTransform: 'uppercase',
-    letterSpacing: '0.5px',
+    letterSpacing: '0.08em',
+    fontWeight: 600,
+    marginBottom: '2px',
   },
-  infoValue: {
-    fontSize: '15px',
-    color: '#1f2937',
-    margin: 0,
-    fontWeight: '500',
+  cardValue: {
+    fontSize: 'var(--fs-base)',
+    fontWeight: 700,
+    color: '#fff',
+  },
+  cardLink: {
+    fontSize: 'var(--fs-base)',
+    fontWeight: 600,
+    color: '#818cf8',
+    textDecoration: 'none',
+  },
+  builtWith: {
+    padding: 'var(--space-5) var(--space-6)',
+    background: '#161616',
+    borderRadius: '20px',
+    border: '1px solid rgba(255,255,255,0.06)',
+    marginTop: 'var(--space-2)',
+  },
+  builtLabel: {
+    fontSize: 'var(--fs-xs)',
+    color: 'rgba(255,255,255,0.35)',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em',
+    fontWeight: 600,
+    display: 'block',
+    marginBottom: 'var(--space-3)',
+  },
+  builtRow: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: 'var(--space-2)',
+  },
+  techPill: {
+    padding: '6px 14px',
+    fontSize: 'var(--fs-xs)',
+    fontWeight: 700,
+    color: 'rgba(255,255,255,0.7)',
+    background: 'rgba(255,255,255,0.06)',
+    borderRadius: '60px',
+    border: '1px solid rgba(255,255,255,0.08)',
+    letterSpacing: '0.02em',
+  },
+  formCard: {
+    background: '#161616',
+    borderRadius: '24px',
+    padding: 'var(--space-8)',
+    border: '1px solid rgba(255,255,255,0.06)',
+  },
+  formTitle: {
+    fontFamily: "'Inter', 'system-ui', sans-serif",
+    fontSize: 'var(--fs-lg)',
+    fontWeight: 800,
+    color: '#fff',
+    textTransform: 'uppercase',
+    letterSpacing: '0.04em',
+    marginBottom: 'var(--space-6)',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
+    gap: 'var(--space-5)',
   },
   formGroup: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '8px',
+    gap: 'var(--space-2)',
   },
   label: {
-    fontSize: '14px',
-    fontWeight: '500',
-    color: '#374151',
+    fontSize: 'var(--fs-sm)',
+    fontWeight: 600,
+    color: 'rgba(255,255,255,0.5)',
   },
-  input: {
-    padding: '12px 16px',
-    border: '1px solid #d1d5db',
-    borderRadius: '10px',
-    fontSize: '15px',
-    outline: 'none',
-    transition: 'border-color 0.2s',
-  },
-  textarea: {
-    padding: '12px 16px',
-    border: '1px solid #d1d5db',
-    borderRadius: '10px',
-    fontSize: '15px',
-    outline: 'none',
-    resize: 'vertical',
-    fontFamily: 'inherit',
-  },
-  button: {
-    padding: '14px 24px',
-    background: '#6366f1',
-    color: '#fff',
+  submitBtn: {
+    padding: '16px 36px',
+    fontSize: '0.9rem',
+    fontWeight: 800,
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    color: '#0a0a0a',
+    background: '#fff',
+    borderRadius: '60px',
     border: 'none',
-    borderRadius: '10px',
-    fontSize: '16px',
-    fontWeight: '600',
     cursor: 'pointer',
-    transition: 'background 0.2s',
-  },
-  mapSection: {
-    marginTop: '40px',
-  },
-  mapTitle: {
-    fontSize: '28px',
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: '24px',
-    color: '#1f2937',
-  },
-  mapContainer: {
-    borderRadius: '16px',
-    overflow: 'hidden',
-    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+    marginTop: 'var(--space-2)',
   },
 };
