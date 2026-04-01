@@ -22,36 +22,92 @@ const STATS = [
   { value: '3–12', label: 'Age Range', color: 'var(--accent-amber)' },
 ];
 
-const HERO_GRADIENTS = [
-  { angle: '135deg', from: '#6366f1', to: '#8b5cf6' },
-  { angle: '135deg', from: '#06b6d4', to: '#10b981' },
-  { angle: '135deg', from: '#f59e0b', to: '#f43f5e' },
-];
+const ROTATING_WORDS = ['Play', 'Learn', 'Grow', 'Create', 'Explore'];
 
 function AnimatedText() {
-  const [visible, setVisible] = useState(false);
-  
+  const [phase, setPhase] = useState(0); // 0=hidden, 1=letters, 2=full
+  const [wordIdx, setWordIdx] = useState(0);
+  const [wordVisible, setWordVisible] = useState(true);
+  const letters = 'खेल'.split('');
+
   useEffect(() => {
-    setVisible(true);
+    const t1 = setTimeout(() => setPhase(1), 200);
+    const t2 = setTimeout(() => setPhase(2), 1200);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
+  useEffect(() => {
+    if (phase < 2) return;
+    const interval = setInterval(() => {
+      setWordVisible(false);
+      setTimeout(() => {
+        setWordIdx(i => (i + 1) % ROTATING_WORDS.length);
+        setWordVisible(true);
+      }, 400);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [phase]);
+
   return (
-    <div style={{
-      ...khelContainer,
-      opacity: visible ? 1 : 0,
-      transform: visible ? 'translateY(0)' : 'translateY(30px)',
-      transition: 'all 1s ease-out',
-    }}>
-      <div style={khelDevanagari}>
-        <span style={khelHindi}>खेल</span>
+    <div style={heroIntro}>
+      {/* Animated Devanagari letters with stagger */}
+      <div style={heroLettersRow}>
+        {letters.map((char, i) => (
+          <span
+            key={i}
+            style={{
+              ...heroLetter,
+              opacity: phase >= 1 ? 1 : 0,
+              transform: phase >= 1 ? 'translateY(0) scale(1) rotate(0deg)' : 'translateY(60px) scale(0.3) rotate(-15deg)',
+              transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.15}s`,
+              animationDelay: phase >= 2 ? `${i * 0.5}s` : undefined,
+              animation: phase >= 2 ? `heroGlow 3s ease-in-out ${i * 0.5}s infinite` : undefined,
+            }}
+          >
+            {char}
+          </span>
+        ))}
       </div>
-      <div style={khelMeaning}>
-        <span style={khelWord}>Khel</span>
-        <span style={khelDefinition}>— The Sanskrit word for "PLAY"</span>
+
+      {/* Decorative line */}
+      <div style={{
+        ...heroLine,
+        width: phase >= 2 ? '120px' : '0px',
+        opacity: phase >= 2 ? 1 : 0,
+        transition: 'all 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s',
+      }} />
+
+      {/* Rotating word + tagline */}
+      <div style={{
+        ...heroTagline,
+        opacity: phase >= 2 ? 1 : 0,
+        transform: phase >= 2 ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'all 0.8s ease-out 1s',
+      }}>
+        <span style={heroTagStatic}>Every child deserves to </span>
+        <span style={{
+          ...heroTagRotating,
+          opacity: wordVisible ? 1 : 0,
+          transform: wordVisible ? 'translateY(0)' : 'translateY(-12px)',
+          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}>
+          {ROTATING_WORDS[wordIdx]}
+        </span>
       </div>
-      <p style={khelPhilosophy}>
-        "Where Learning Meets Joy Through Play"
-      </p>
+
+      {/* Subtle particles */}
+      {phase >= 2 && (
+        <div style={heroParticles}>
+          {[...Array(5)].map((_, i) => (
+            <span key={i} style={{
+              ...heroParticle,
+              left: `${15 + i * 18}%`,
+              animationDelay: `${i * 0.7}s`,
+              animationDuration: `${2.5 + i * 0.5}s`,
+            }} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -411,58 +467,80 @@ const s = {
   },
 };
 
-const khelContainer = {
+const heroIntro = {
   position: 'relative',
   textAlign: 'center',
-  padding: 'var(--space-8)',
-  marginBottom: 'var(--space-8)',
+  padding: 'var(--space-6) var(--space-4)',
+  marginBottom: 'var(--space-6)',
 };
 
-const khelDevanagari = {
-  display: 'inline-block',
-  position: 'relative',
+const heroLettersRow = {
+  display: 'inline-flex',
+  gap: 'clamp(0.2rem, 2vw, 0.8rem)',
+  justifyContent: 'center',
+  perspective: '600px',
 };
 
-const khelHindi = {
+const heroLetter = {
   fontFamily: "'Noto Sans Devanagari', 'Mangal', sans-serif",
-  fontSize: 'clamp(4rem, 15vw, 10rem)',
+  fontSize: 'clamp(4rem, 14vw, 9rem)',
   fontWeight: 900,
-  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%)',
+  background: 'linear-gradient(160deg, #818cf8 0%, #6366f1 30%, #06b6d4 60%, #34d399 100%)',
+  backgroundSize: '200% 200%',
   WebkitBackgroundClip: 'text',
   WebkitTextFillColor: 'transparent',
   backgroundClip: 'text',
-  letterSpacing: '0.1em',
-  textShadow: 'none',
-  animation: 'float 3s ease-in-out infinite',
-  display: 'block',
+  display: 'inline-block',
+  willChange: 'transform, opacity',
+  filter: 'drop-shadow(0 0 30px rgba(99, 102, 241, 0.3))',
 };
 
-const khelMeaning = {
+const heroLine = {
+  height: '2px',
+  background: 'linear-gradient(90deg, transparent, #6366f1, #06b6d4, transparent)',
+  margin: 'var(--space-4) auto',
+  borderRadius: '2px',
+};
+
+const heroTagline = {
   display: 'flex',
-  alignItems: 'center',
+  alignItems: 'baseline',
   justifyContent: 'center',
-  gap: 'var(--space-4)',
+  gap: 'var(--space-2)',
   flexWrap: 'wrap',
-  marginTop: 'var(--space-2)',
 };
 
-const khelWord = {
-  fontSize: 'var(--fs-2xl)',
-  fontWeight: 700,
-  color: '#fff',
-  letterSpacing: '0.15em',
-};
-
-const khelDefinition = {
-  fontSize: 'var(--fs-lg)',
+const heroTagStatic = {
+  fontSize: 'clamp(1rem, 2.5vw, 1.4rem)',
   color: 'rgba(255,255,255,0.7)',
-  fontStyle: 'italic',
+  fontWeight: 400,
+  letterSpacing: '0.02em',
 };
 
-const khelPhilosophy = {
-  fontSize: 'var(--fs-xl)',
-  color: 'rgba(255,255,255,0.9)',
-  marginTop: 'var(--space-4)',
-  fontWeight: 500,
-  letterSpacing: '0.05em',
+const heroTagRotating = {
+  fontSize: 'clamp(1.2rem, 3vw, 1.6rem)',
+  fontWeight: 700,
+  background: 'linear-gradient(135deg, #818cf8, #06b6d4)',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  backgroundClip: 'text',
+  display: 'inline-block',
+  minWidth: '90px',
+};
+
+const heroParticles = {
+  position: 'absolute',
+  inset: 0,
+  pointerEvents: 'none',
+  overflow: 'hidden',
+};
+
+const heroParticle = {
+  position: 'absolute',
+  bottom: '0',
+  width: '4px',
+  height: '4px',
+  borderRadius: '50%',
+  background: 'rgba(99, 102, 241, 0.5)',
+  animation: 'heroParticleFloat 3s ease-in-out infinite',
 };
