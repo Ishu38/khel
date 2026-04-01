@@ -1,0 +1,48 @@
+services:
+  # Express API Gateway
+  - type: web
+    name: khel-gateway
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node gateway/src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3001"
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ENGINE_URL
+        fromService:
+          name: khel-engine
+          type: web
+          property: host
+      - key: CLIENT_URL
+        sync: false
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+
+  # FastAPI AI Engine
+  - type: web
+    name: khel-engine
+    runtime: python
+    plan: free
+    rootDir: engine
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: DEEPSEEK_BASE_URL
+        value: https://api.deepseek.com
+      - key: MODEL_ID
+        value: deepseek-chat
+      - key: ALLOWED_ORIGINS
+        sync: false

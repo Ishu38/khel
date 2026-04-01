@@ -1,0 +1,26 @@
+{
+  "name": "khel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AI-Powered Educational Game Engine — curriculum-aligned games from pre-nursery to Class VII",
+  "type": "module",
+  "workspaces": [
+    "gateway",
+    "client",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:gateway\" \"npm run dev:engine\" \"npm run dev:client\"",
+    "dev:gateway": "npm run dev --workspace=gateway",
+    "dev:engine": "cd engine && uvicorn app.main:app --reload --port 8000",
+    "dev:client": "npm run dev --workspace=client",
+    "build": "npm run build --workspace=client",
+    "lint": "concurrently \"npm run lint --workspace=gateway\" \"npm run lint --workspace=client\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
