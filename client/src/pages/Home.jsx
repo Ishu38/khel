@@ -1,269 +1,208 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.jsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+
+/* ─── Data ──────────────────────────────────────────────────────────────── */
 
 const FEATURES = [
-  { icon: '✨', title: 'AI Game Generator', desc: 'Describe your game in plain language — our AI builds it with sprites, levels, and scoring.', color: 'var(--accent-violet)' },
-  { icon: '🧒', title: 'Age-Appropriate', desc: "Developmental guardrails ensure games match your child's cognitive stage (Piaget-based).", color: 'var(--accent-cyan)' },
-  { icon: '📚', title: 'Curriculum Aligned', desc: 'Mapped to NCERT, CBSE, ICSE, and State Board learning outcomes.', color: 'var(--accent-emerald)' },
-  { icon: '🎯', title: 'Adaptive Difficulty', desc: "Games auto-adjust to keep your child in the Zone of Proximal Development.", color: 'var(--accent-amber)' },
+  { icon: '🧒', label: 'Age-Appropriate', desc: 'Piaget-based guardrails', bg: '#ddd6fe' },
+  { icon: '📚', label: 'Curriculum Aligned', desc: 'NCERT, CBSE, ICSE & more', bg: '#a7f3d0' },
+  { icon: '🎯', label: 'Adaptive Difficulty', desc: 'Zone of Proximal Development', bg: '#fde68a' },
+  { icon: '⚡', label: 'AI Generation', desc: 'Prompt to game in seconds', bg: '#c7d2fe' },
+  { icon: '🌐', label: '8 Indian Languages', desc: 'Hindi, Tamil, Bengali & more', bg: '#fbcfe8' },
+  { icon: '📊', label: 'Learning Analytics', desc: 'Track progress & gaps', bg: '#bae6fd' },
+];
+
+const GAME_TYPES = [
+  { emoji: '👆', name: 'Tap & Match', age: '3–6' },
+  { emoji: '🔀', name: 'Drag & Sort', age: '6–9' },
+  { emoji: '🏃', name: 'Maze Runner', age: '6–9' },
+  { emoji: '🔤', name: 'Word Builder', age: '8–11' },
+  { emoji: '❓', name: 'Quiz Adventure', age: '9–12' },
+  { emoji: '♟️', name: 'Strategy Sim', age: '10–12' },
+  { emoji: '💻', name: 'Code & Play', age: '8–12' },
+  { emoji: '🏎️', name: 'Multiplayer', age: '8–12' },
 ];
 
 const STEPS = [
-  { num: '01', title: 'Describe', desc: 'Tell Khel what you want to teach, the age group, and language.', icon: '💬' },
-  { num: '02', title: 'Generate', desc: 'Our AI engine creates a complete, playable game in seconds.', icon: '⚡' },
-  { num: '03', title: 'Play & Track', desc: 'Students play the game while parents and teachers monitor progress.', icon: '📊' },
+  { num: '01', title: 'Describe', desc: 'Tell us what to teach, the age, and language.', icon: '💬' },
+  { num: '02', title: 'Generate', desc: 'AI builds a complete playable game in seconds.', icon: '⚡' },
+  { num: '03', title: 'Play & Track', desc: 'Kids play. You monitor progress and learning gaps.', icon: '📊' },
 ];
 
-const STATS = [
-  { value: '8+', label: 'Game Types', color: 'var(--accent-indigo-hover)' },
-  { value: '6', label: 'Curriculum Boards', color: 'var(--accent-cyan)' },
-  { value: '8', label: 'Indian Languages', color: 'var(--accent-emerald)' },
-  { value: '3–12', label: 'Age Range', color: 'var(--accent-amber)' },
-];
+const MARQUEE_ITEMS = ['NCERT', 'CBSE', 'ICSE', 'State Boards', 'Montessori', 'IB PYP', 'Hindi', 'Tamil', 'Bengali', 'Bhojpuri', 'Marathi', 'Telugu', 'Kannada', 'English'];
 
-const ROTATING_WORDS = ['Play', 'Learn', 'Grow', 'Create', 'Explore'];
+/* ─── Playful bouncing mascot ───────────────────────────────────────────── */
 
-function AnimatedText() {
-  const [phase, setPhase] = useState(0); // 0=hidden, 1=letters, 2=full
-  const [wordIdx, setWordIdx] = useState(0);
-  const [wordVisible, setWordVisible] = useState(true);
-  const letters = 'खेल'.split('');
+function Mascot() {
+  return (
+    <span style={{
+      fontSize: 'clamp(3rem, 8vw, 5rem)',
+      display: 'inline-block',
+      animation: 'heroFloat 3s ease-in-out infinite',
+      cursor: 'default',
+      userSelect: 'none',
+      filter: 'drop-shadow(0 8px 20px rgba(0,0,0,0.3))',
+    }}>
+      🎮
+    </span>
+  );
+}
+
+/* ─── Rotating word cycle ───────────────────────────────────────────────── */
+
+const CYCLE_WORDS = ['LEARN.', 'PLAY.', 'GROW.', 'CREATE.'];
+
+function RotatingWord() {
+  const [idx, setIdx] = useState(0);
+  const [show, setShow] = useState(true);
 
   useEffect(() => {
-    const t1 = setTimeout(() => setPhase(1), 200);
-    const t2 = setTimeout(() => setPhase(2), 1200);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const interval = setInterval(() => {
+      setShow(false);
+      setTimeout(() => {
+        setIdx(i => (i + 1) % CYCLE_WORDS.length);
+        setShow(true);
+      }, 300);
+    }, 2200);
+    return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (phase < 2) return;
-    const interval = setInterval(() => {
-      setWordVisible(false);
-      setTimeout(() => {
-        setWordIdx(i => (i + 1) % ROTATING_WORDS.length);
-        setWordVisible(true);
-      }, 400);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, [phase]);
-
   return (
-    <div style={heroIntro}>
-      {/* Animated Devanagari letters with stagger */}
-      <div style={heroLettersRow}>
-        {letters.map((char, i) => (
-          <span
-            key={i}
-            style={{
-              ...heroLetter,
-              opacity: phase >= 1 ? 1 : 0,
-              transform: phase >= 1 ? 'translateY(0) scale(1) rotate(0deg)' : 'translateY(60px) scale(0.3) rotate(-15deg)',
-              transition: `all 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${i * 0.15}s`,
-              animationDelay: phase >= 2 ? `${i * 0.5}s` : undefined,
-              animation: phase >= 2 ? `heroGlow 3s ease-in-out ${i * 0.5}s infinite` : undefined,
-            }}
-          >
-            {char}
-          </span>
+    <span style={{
+      ...styles.heroRotWord,
+      opacity: show ? 1 : 0,
+      transform: show ? 'translateY(0)' : 'translateY(20px)',
+      transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
+    }}>
+      {CYCLE_WORDS[idx]}
+    </span>
+  );
+}
+
+/* ─── Marquee ───────────────────────────────────────────────────────────── */
+
+function Marquee() {
+  const doubled = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
+  return (
+    <div style={styles.marqueeWrap}>
+      <div style={styles.marqueeTrack}>
+        {doubled.map((item, i) => (
+          <span key={i} style={styles.marqueeItem}>{item}</span>
         ))}
       </div>
-
-      {/* Decorative line */}
-      <div style={{
-        ...heroLine,
-        width: phase >= 2 ? '120px' : '0px',
-        opacity: phase >= 2 ? 1 : 0,
-        transition: 'all 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s',
-      }} />
-
-      {/* Rotating word + tagline */}
-      <div style={{
-        ...heroTagline,
-        opacity: phase >= 2 ? 1 : 0,
-        transform: phase >= 2 ? 'translateY(0)' : 'translateY(20px)',
-        transition: 'all 0.8s ease-out 1s',
-      }}>
-        <span style={heroTagStatic}>Every child deserves to </span>
-        <span style={{
-          ...heroTagRotating,
-          opacity: wordVisible ? 1 : 0,
-          transform: wordVisible ? 'translateY(0)' : 'translateY(-12px)',
-          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}>
-          {ROTATING_WORDS[wordIdx]}
-        </span>
-      </div>
-
-      {/* Subtle particles */}
-      {phase >= 2 && (
-        <div style={heroParticles}>
-          {[...Array(5)].map((_, i) => (
-            <span key={i} style={{
-              ...heroParticle,
-              left: `${15 + i * 18}%`,
-              animationDelay: `${i * 0.7}s`,
-              animationDuration: `${2.5 + i * 0.5}s`,
-            }} />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
 
+/* ─── Page ──────────────────────────────────────────────────────────────── */
+
 export default function Home() {
   const { user } = useAuth();
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
 
   return (
-    <div>
-      {/* ─── Hero ──────────────────────────────────────────────────────── */}
-      <section style={s.hero}>
-        {/* Background decorations */}
-        <div style={s.heroBgOrb1} />
-        <div style={s.heroBgOrb2} />
-        <div style={s.heroBgOrb3} />
+    <div style={{ background: '#0a0a0a' }}>
 
-        {/* Animated Khel Intro */}
-        <AnimatedText />
+      {/* ─── Hero ────────────────────────────────────────────────────── */}
+      <section style={styles.hero}>
+        <div style={styles.heroBg} />
 
-        <div className="container" style={s.heroContent}>
-          <div style={s.heroBadge}>
-            <span style={{ fontSize: '0.75rem' }}>⚡</span>
-            AI-Powered Educational Games
-          </div>
+        <div style={styles.heroInner}>
+          <Mascot />
 
-          <h1 style={s.heroTitle}>
-            Create Curriculum-Aligned<br />
-            Games <span className="gradient-text">Without Code</span>
+          <h1 style={styles.heroTitle}>
+            MAKE KIDS<br />
+            <RotatingWord />
           </h1>
 
-          <p style={s.heroSubtitle}>
-            From pre-nursery to Class VII — tell Khel what you want to teach,
-            and get a playable game in minutes. Aligned to NCERT, CBSE, ICSE, and more.
+          <p style={styles.heroSub}>
+            The AI-powered platform that turns any curriculum topic into
+            a playable game. Pre-nursery to Class VII. No code needed.
           </p>
 
-          <div style={s.heroCta}>
-            {user ? (
-              <>
-                <Link to="/create" className="btn btn-primary btn-lg">
-                  ✨ Create a Game
-                </Link>
-                <Link to="/explore" className="btn btn-secondary btn-lg">
-                  Explore Games →
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link to="/register" className="btn btn-primary btn-lg">
-                  Get Started Free →
-                </Link>
-                <Link to="/explore" className="btn btn-secondary btn-lg">
-                  Browse Games
-                </Link>
-              </>
-            )}
-          </div>
-
-          {/* Stats row */}
-          <div style={s.statsRow}>
-            {STATS.map((st, i) => (
-              <div key={i} style={s.statItem} className="animate-fade-in-up">
-                <div style={{ ...s.statVal, color: st.color }}>{st.value}</div>
-                <div style={s.statLbl}>{st.label}</div>
-              </div>
-            ))}
+          <div style={styles.heroBtns}>
+            <Link to={user ? '/create' : '/register'} style={styles.btnPrimary}>
+              GET STARTED →
+            </Link>
+            <Link to="/explore" style={styles.btnSecondary}>
+              EXPLORE GAMES
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ─── Features ──────────────────────────────────────────────────── */}
-      <section style={s.section}>
-        <div className="container">
-          <div className="text-center" style={{ marginBottom: 'var(--space-12)' }}>
-            <h2 style={s.sectionTitle}>Built for How Children Learn</h2>
-            <p style={s.sectionSub}>Every feature is grounded in developmental psychology and Indian curriculum standards.</p>
-          </div>
+      {/* ─── Marquee ─────────────────────────────────────────────────── */}
+      <Marquee />
 
-          <div className="grid grid-4" style={{ gap: 'var(--space-6)' }}>
+      {/* ─── Features (pill cards) ───────────────────────────────────── */}
+      <section style={styles.section}>
+        <div style={styles.container}>
+          <h2 style={styles.sectionTitle}>BUILT FOR HOW<br />CHILDREN LEARN.</h2>
+          <p style={styles.sectionSub}>
+            Every feature grounded in developmental psychology and Indian curriculum standards.
+          </p>
+
+          <div style={styles.featGrid}>
             {FEATURES.map((f, i) => (
-              <div key={i} className="card card-glow" style={{ '--delay': `${i * 0.1}s`, animationDelay: `${i * 0.1}s` }}>
-                <div style={{ ...s.featureIcon, background: `${f.color}15`, color: f.color }}>{f.icon}</div>
-                <h3 style={s.featureTitle}>{f.title}</h3>
-                <p style={s.featureDesc}>{f.desc}</p>
+              <div key={i} style={styles.featCard}>
+                <div style={{ ...styles.featIcon, background: f.bg }}>
+                  <span style={{ fontSize: '1.6rem' }}>{f.icon}</span>
+                </div>
+                <div>
+                  <div style={styles.featLabel}>{f.label}</div>
+                  <div style={styles.featDesc}>{f.desc}</div>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── How it Works ──────────────────────────────────────────────── */}
-      <section style={{ ...s.section, background: 'var(--bg-secondary)' }}>
-        <div className="container">
-          <div className="text-center" style={{ marginBottom: 'var(--space-12)' }}>
-            <h2 style={s.sectionTitle}>How It Works</h2>
-            <p style={s.sectionSub}>From idea to playable game in three simple steps.</p>
-          </div>
+      {/* ─── How It Works ────────────────────────────────────────────── */}
+      <section style={{ ...styles.section, background: '#111' }}>
+        <div style={styles.container}>
+          <h2 style={styles.sectionTitle}>THREE STEPS.<br />THAT'S IT.</h2>
 
-          <div style={s.stepsGrid}>
+          <div style={styles.stepsGrid}>
             {STEPS.map((step, i) => (
-              <div key={i} style={s.step}>
-                <div style={s.stepIcon}>{step.icon}</div>
-                <div style={s.stepNum}>{step.num}</div>
-                <h3 style={s.stepTitle}>{step.title}</h3>
-                <p style={s.featureDesc}>{step.desc}</p>
-                {i < STEPS.length - 1 && <div style={s.stepConnector} className="hide-mobile" />}
+              <div key={i} style={styles.stepCard}>
+                <div style={styles.stepNum}>{step.num}</div>
+                <span style={{ fontSize: '2.5rem' }}>{step.icon}</span>
+                <h3 style={styles.stepTitle}>{step.title}</h3>
+                <p style={styles.stepDesc}>{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── Game Types ────────────────────────────────────────────────── */}
-      <section style={s.section}>
-        <div className="container">
-          <div className="text-center" style={{ marginBottom: 'var(--space-12)' }}>
-            <h2 style={s.sectionTitle}>8 Game Types, Endless Possibilities</h2>
-            <p style={s.sectionSub}>Each game type targets specific cognitive skills appropriate for the developmental stage.</p>
-          </div>
+      {/* ─── Game Types ──────────────────────────────────────────────── */}
+      <section style={styles.section}>
+        <div style={styles.container}>
+          <h2 style={styles.sectionTitle}>8 GAME TYPES.</h2>
+          <p style={styles.sectionSub}>Each one targets specific cognitive skills for the right developmental stage.</p>
 
-          <div className="grid grid-4" style={{ gap: 'var(--space-4)' }}>
-            {[
-              { emoji: '👆', name: 'Tap & Match', age: '3–6', color: 'linear-gradient(135deg, #06b6d4, #38bdf8)' },
-              { emoji: '🔀', name: 'Drag & Sort', age: '6–9', color: 'linear-gradient(135deg, #10b981, #34d399)' },
-              { emoji: '🏃', name: 'Maze Runner', age: '6–9', color: 'linear-gradient(135deg, #f59e0b, #fbbf24)' },
-              { emoji: '🔤', name: 'Word Builder', age: '8–11', color: 'linear-gradient(135deg, #8b5cf6, #a78bfa)' },
-              { emoji: '❓', name: 'Quiz Adventure', age: '9–12', color: 'linear-gradient(135deg, #6366f1, #818cf8)' },
-              { emoji: '♟️', name: 'Strategy Sim', age: '10–12', color: 'linear-gradient(135deg, #f43f5e, #fb7185)' },
-              { emoji: '💻', name: 'Code & Play', age: '8–12', color: 'linear-gradient(135deg, #38bdf8, #60a5fa)' },
-              { emoji: '🏎️', name: 'Multiplayer Race', age: '8–12', color: 'linear-gradient(135deg, #f59e0b, #fbbf24)' },
-            ].map((g, i) => (
-              <div key={i} style={{...s.gameTypeCard, background: g.color}}>
-                <span style={{ fontSize: '2.5rem', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }}>{g.emoji}</span>
-                <div style={{ fontWeight: 700, fontSize: 'var(--fs-sm)', color: 'white', textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}>{g.name}</div>
-                <div className="badge" style={{ background: 'rgba(255,255,255,0.25)', color: 'white', border: 'none' }}>{g.age} yrs</div>
+          <div style={styles.gameGrid}>
+            {GAME_TYPES.map((g, i) => (
+              <div key={i} style={styles.gameCard}>
+                <span style={{ fontSize: '2rem' }}>{g.emoji}</span>
+                <div style={styles.gameName}>{g.name}</div>
+                <div style={styles.gameAge}>{g.age} yrs</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── CTA ───────────────────────────────────────────────────────── */}
-      <section style={s.ctaSection}>
-        <div className="container text-center">
-          <h2 style={{ fontSize: 'var(--fs-4xl)', marginBottom: 'var(--space-4)' }}>
-            Ready to Create Your First Game?
-          </h2>
-          <p style={{ color: 'var(--text-tertiary)', marginBottom: 'var(--space-8)', fontSize: 'var(--fs-lg)' }}>
-            Join teachers and parents who are transforming education with AI-powered games.
+      {/* ─── CTA ─────────────────────────────────────────────────────── */}
+      <section style={styles.ctaSection}>
+        <div style={styles.container}>
+          <h2 style={styles.ctaTitle}>READY TO BUILD<br />YOUR FIRST GAME?</h2>
+          <p style={styles.ctaSub}>
+            Join thousands of teachers and parents transforming education.
           </p>
-          <Link to={user ? '/create' : '/register'} className="btn btn-primary btn-lg">
-            {user ? '✨ Start Creating' : "Get Started — It's Free"}
+          <Link to={user ? '/create' : '/register'} style={styles.btnPrimary}>
+            {user ? 'START CREATING →' : "GET STARTED — IT'S FREE →"}
           </Link>
         </div>
       </section>
@@ -271,276 +210,278 @@ export default function Home() {
   );
 }
 
-const s = {
+/* ─── Styles ────────────────────────────────────────────────────────────── */
+
+const styles = {
+  /* Hero */
   hero: {
     position: 'relative',
-    overflow: 'hidden',
-    padding: 'var(--space-20) 0 var(--space-16)',
-    background: 'var(--gradient-hero)',
-    minHeight: '85vh',
+    minHeight: '100vh',
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    padding: 'var(--space-16) var(--space-6)',
   },
-  heroBgOrb1: {
+  heroBg: {
     position: 'absolute',
-    top: '-20%',
-    left: '-10%',
-    width: '500px',
-    height: '500px',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 70%)',
-    filter: 'blur(60px)',
+    inset: 0,
+    background: 'radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(6,182,212,0.08) 0%, transparent 50%)',
     pointerEvents: 'none',
   },
-  heroBgOrb2: {
-    position: 'absolute',
-    bottom: '-10%',
-    right: '-5%',
-    width: '400px',
-    height: '400px',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%)',
-    filter: 'blur(60px)',
-    pointerEvents: 'none',
-  },
-  heroBgOrb3: {
-    position: 'absolute',
-    top: '60%',
-    left: '50%',
-    width: '300px',
-    height: '300px',
-    borderRadius: '50%',
-    background: 'radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%)',
-    filter: 'blur(60px)',
-    pointerEvents: 'none',
-  },
-  heroContent: {
+  heroInner: {
     position: 'relative',
     textAlign: 'center',
+    maxWidth: '900px',
     zIndex: 1,
   },
-  heroBadge: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 'var(--space-2)',
-    padding: 'var(--space-2) var(--space-4)',
-    fontSize: 'var(--fs-sm)',
-    fontWeight: 500,
-    color: 'var(--accent-indigo-hover)',
-    background: 'rgba(99, 102, 241, 0.1)',
-    border: '1px solid rgba(99, 102, 241, 0.2)',
-    borderRadius: 'var(--radius-full)',
-    marginBottom: 'var(--space-6)',
-  },
   heroTitle: {
-    fontSize: 'clamp(2rem, 5vw, 3.75rem)',
-    fontWeight: 800,
-    lineHeight: 1.1,
-    marginBottom: 'var(--space-6)',
-    letterSpacing: '-0.03em',
+    fontFamily: "'Inter', 'system-ui', sans-serif",
+    fontSize: 'clamp(3rem, 12vw, 7rem)',
+    fontWeight: 900,
+    lineHeight: 0.95,
+    letterSpacing: '-0.04em',
+    color: '#fff',
+    margin: 'var(--space-6) 0 var(--space-6)',
+    textTransform: 'uppercase',
   },
-  heroSubtitle: {
+  heroRotWord: {
+    display: 'inline-block',
+    background: 'linear-gradient(135deg, #818cf8, #06b6d4, #34d399)',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+    backgroundSize: '200% 200%',
+    animation: 'gradientShift 4s ease infinite',
+  },
+  heroSub: {
     fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-    color: 'var(--text-tertiary)',
-    maxWidth: '640px',
+    color: 'rgba(255,255,255,0.5)',
+    maxWidth: '540px',
     margin: '0 auto var(--space-8)',
     lineHeight: 1.7,
   },
-  heroCta: {
+  heroBtns: {
     display: 'flex',
     justifyContent: 'center',
     gap: 'var(--space-4)',
     flexWrap: 'wrap',
-    marginBottom: 'var(--space-12)',
   },
-  statsRow: {
-    display: 'flex',
-    justifyContent: 'center',
-    gap: 'var(--space-8)',
-    flexWrap: 'wrap',
-    padding: 'var(--space-6) var(--space-8)',
-    background: 'var(--bg-glass)',
-    backdropFilter: 'blur(20px)',
-    borderRadius: 'var(--radius-xl)',
-    border: '1px solid var(--border-primary)',
-    maxWidth: '640px',
-    margin: '0 auto',
-  },
-  statItem: { textAlign: 'center' },
-  statVal: {
-    fontFamily: 'var(--font-heading)',
-    fontSize: 'var(--fs-3xl)',
-    fontWeight: 700,
-    lineHeight: 1,
-    marginBottom: 'var(--space-1)',
-  },
-  statLbl: {
-    fontSize: 'var(--fs-xs)',
-    color: 'var(--text-muted)',
+
+  /* Buttons — Creem style */
+  btnPrimary: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 'var(--space-2)',
+    padding: '16px 36px',
+    fontSize: '0.9rem',
+    fontWeight: 800,
+    letterSpacing: '0.06em',
     textTransform: 'uppercase',
-    letterSpacing: '0.08em',
+    color: '#0a0a0a',
+    background: '#fff',
+    borderRadius: '60px',
+    textDecoration: 'none',
+    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+    boxShadow: '0 4px 20px rgba(255,255,255,0.1)',
+    border: 'none',
+    cursor: 'pointer',
   },
+  btnSecondary: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 'var(--space-2)',
+    padding: '16px 36px',
+    fontSize: '0.9rem',
+    fontWeight: 800,
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase',
+    color: '#fff',
+    background: 'transparent',
+    borderRadius: '60px',
+    border: '2px solid rgba(255,255,255,0.2)',
+    textDecoration: 'none',
+    transition: 'all 0.25s ease',
+    cursor: 'pointer',
+  },
+
+  /* Marquee */
+  marqueeWrap: {
+    overflow: 'hidden',
+    padding: 'var(--space-4) 0',
+    borderTop: '1px solid rgba(255,255,255,0.06)',
+    borderBottom: '1px solid rgba(255,255,255,0.06)',
+    background: '#0f0f0f',
+  },
+  marqueeTrack: {
+    display: 'flex',
+    gap: 'var(--space-8)',
+    animation: 'marquee 25s linear infinite',
+    width: 'max-content',
+  },
+  marqueeItem: {
+    fontSize: 'var(--fs-sm)',
+    fontWeight: 700,
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+    color: 'rgba(255,255,255,0.25)',
+    whiteSpace: 'nowrap',
+  },
+
+  /* Sections */
   section: {
-    padding: 'var(--space-20) 0',
+    padding: 'clamp(60px, 10vw, 120px) 0',
+  },
+  container: {
+    maxWidth: '1100px',
+    margin: '0 auto',
+    padding: '0 var(--space-6)',
   },
   sectionTitle: {
-    fontSize: 'var(--fs-4xl)',
-    marginBottom: 'var(--space-3)',
+    fontFamily: "'Inter', 'system-ui', sans-serif",
+    fontSize: 'clamp(2rem, 6vw, 4rem)',
+    fontWeight: 900,
+    lineHeight: 1,
+    letterSpacing: '-0.03em',
+    color: '#fff',
+    textTransform: 'uppercase',
+    marginBottom: 'var(--space-4)',
   },
   sectionSub: {
-    fontSize: 'var(--fs-lg)',
-    color: 'var(--text-tertiary)',
-    maxWidth: '560px',
-    margin: '0 auto',
+    fontSize: 'clamp(0.95rem, 1.5vw, 1.15rem)',
+    color: 'rgba(255,255,255,0.4)',
+    maxWidth: '500px',
+    lineHeight: 1.6,
+    marginBottom: 'var(--space-10)',
   },
-  featureIcon: {
-    width: '48px',
-    height: '48px',
-    borderRadius: 'var(--radius-md)',
+
+  /* Feature cards — Creem pill style */
+  featGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    gap: 'var(--space-4)',
+  },
+  featCard: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 'var(--space-4)',
+    padding: 'var(--space-5) var(--space-6)',
+    background: '#161616',
+    borderRadius: '20px',
+    border: '1px solid rgba(255,255,255,0.06)',
+    transition: 'all 0.3s ease',
+  },
+  featIcon: {
+    width: '52px',
+    height: '52px',
+    borderRadius: '16px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '1.4rem',
-    marginBottom: 'var(--space-4)',
+    flexShrink: 0,
   },
-  featureTitle: {
-    fontSize: 'var(--fs-lg)',
-    fontWeight: 600,
-    marginBottom: 'var(--space-2)',
+  featLabel: {
+    fontSize: 'var(--fs-base)',
+    fontWeight: 700,
+    color: '#fff',
+    marginBottom: '2px',
   },
-  featureDesc: {
+  featDesc: {
     fontSize: 'var(--fs-sm)',
-    color: 'var(--text-tertiary)',
-    lineHeight: 1.6,
+    color: 'rgba(255,255,255,0.4)',
   },
+
+  /* Steps */
   stepsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-    gap: 'var(--space-8)',
-    position: 'relative',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+    gap: 'var(--space-6)',
   },
-  step: {
+  stepCard: {
+    background: '#1a1a1a',
+    borderRadius: '24px',
+    padding: 'var(--space-8)',
     textAlign: 'center',
+    border: '1px solid rgba(255,255,255,0.06)',
     position: 'relative',
-    padding: 'var(--space-6)',
-  },
-  stepIcon: {
-    fontSize: '2.5rem',
-    marginBottom: 'var(--space-3)',
+    overflow: 'hidden',
   },
   stepNum: {
-    fontFamily: 'var(--font-heading)',
-    fontSize: 'var(--fs-xs)',
-    fontWeight: 700,
-    color: 'var(--accent-indigo)',
-    letterSpacing: '0.1em',
-    marginBottom: 'var(--space-2)',
+    fontFamily: "'Inter', 'system-ui', sans-serif",
+    fontSize: 'clamp(4rem, 8vw, 6rem)',
+    fontWeight: 900,
+    color: 'rgba(255,255,255,0.03)',
+    position: 'absolute',
+    top: '-10px',
+    right: '16px',
+    lineHeight: 1,
+    pointerEvents: 'none',
   },
   stepTitle: {
     fontSize: 'var(--fs-xl)',
-    fontWeight: 700,
+    fontWeight: 800,
+    color: '#fff',
+    marginTop: 'var(--space-3)',
     marginBottom: 'var(--space-2)',
+    textTransform: 'uppercase',
+    letterSpacing: '-0.01em',
   },
-  stepConnector: {
-    position: 'absolute',
-    top: '45%',
-    right: '-20%',
-    width: '40%',
-    height: '2px',
-    background: 'linear-gradient(90deg, var(--accent-indigo), transparent)',
-    opacity: 0.3,
+  stepDesc: {
+    fontSize: 'var(--fs-sm)',
+    color: 'rgba(255,255,255,0.4)',
+    lineHeight: 1.6,
   },
-  gameTypeCard: {
+
+  /* Game Types */
+  gameGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+    gap: 'var(--space-4)',
+  },
+  gameCard: {
+    background: '#161616',
+    borderRadius: '20px',
+    padding: 'var(--space-6) var(--space-4)',
+    textAlign: 'center',
+    border: '1px solid rgba(255,255,255,0.06)',
+    transition: 'all 0.3s ease',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     gap: 'var(--space-2)',
-    padding: 'var(--space-6)',
-    borderRadius: 'var(--radius-lg)',
-    transition: 'all var(--transition-base)',
-    cursor: 'default',
-    boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
   },
+  gameName: {
+    fontSize: 'var(--fs-sm)',
+    fontWeight: 700,
+    color: '#fff',
+  },
+  gameAge: {
+    fontSize: 'var(--fs-xs)',
+    color: 'rgba(255,255,255,0.3)',
+    fontWeight: 600,
+  },
+
+  /* CTA */
   ctaSection: {
-    padding: 'var(--space-20) 0',
-    background: 'var(--bg-secondary)',
+    padding: 'clamp(80px, 12vw, 140px) 0',
+    textAlign: 'center',
+    background: 'radial-gradient(ellipse at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 60%)',
   },
-};
-
-const heroIntro = {
-  position: 'relative',
-  textAlign: 'center',
-  padding: 'var(--space-6) var(--space-4)',
-  marginBottom: 'var(--space-6)',
-};
-
-const heroLettersRow = {
-  display: 'inline-flex',
-  gap: 'clamp(0.2rem, 2vw, 0.8rem)',
-  justifyContent: 'center',
-  perspective: '600px',
-};
-
-const heroLetter = {
-  fontFamily: "'Noto Sans Devanagari', 'Mangal', sans-serif",
-  fontSize: 'clamp(4rem, 14vw, 9rem)',
-  fontWeight: 900,
-  background: 'linear-gradient(160deg, #818cf8 0%, #6366f1 30%, #06b6d4 60%, #34d399 100%)',
-  backgroundSize: '200% 200%',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  backgroundClip: 'text',
-  display: 'inline-block',
-  willChange: 'transform, opacity',
-  filter: 'drop-shadow(0 0 30px rgba(99, 102, 241, 0.3))',
-};
-
-const heroLine = {
-  height: '2px',
-  background: 'linear-gradient(90deg, transparent, #6366f1, #06b6d4, transparent)',
-  margin: 'var(--space-4) auto',
-  borderRadius: '2px',
-};
-
-const heroTagline = {
-  display: 'flex',
-  alignItems: 'baseline',
-  justifyContent: 'center',
-  gap: 'var(--space-2)',
-  flexWrap: 'wrap',
-};
-
-const heroTagStatic = {
-  fontSize: 'clamp(1rem, 2.5vw, 1.4rem)',
-  color: 'rgba(255,255,255,0.7)',
-  fontWeight: 400,
-  letterSpacing: '0.02em',
-};
-
-const heroTagRotating = {
-  fontSize: 'clamp(1.2rem, 3vw, 1.6rem)',
-  fontWeight: 700,
-  background: 'linear-gradient(135deg, #818cf8, #06b6d4)',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  backgroundClip: 'text',
-  display: 'inline-block',
-  minWidth: '90px',
-};
-
-const heroParticles = {
-  position: 'absolute',
-  inset: 0,
-  pointerEvents: 'none',
-  overflow: 'hidden',
-};
-
-const heroParticle = {
-  position: 'absolute',
-  bottom: '0',
-  width: '4px',
-  height: '4px',
-  borderRadius: '50%',
-  background: 'rgba(99, 102, 241, 0.5)',
-  animation: 'heroParticleFloat 3s ease-in-out infinite',
+  ctaTitle: {
+    fontFamily: "'Inter', 'system-ui', sans-serif",
+    fontSize: 'clamp(2rem, 6vw, 4rem)',
+    fontWeight: 900,
+    lineHeight: 1,
+    letterSpacing: '-0.03em',
+    color: '#fff',
+    textTransform: 'uppercase',
+    marginBottom: 'var(--space-4)',
+  },
+  ctaSub: {
+    fontSize: 'clamp(0.95rem, 1.5vw, 1.15rem)',
+    color: 'rgba(255,255,255,0.4)',
+    maxWidth: '440px',
+    margin: '0 auto var(--space-8)',
+    lineHeight: 1.6,
+  },
 };
