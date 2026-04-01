@@ -68,17 +68,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Built with */}
-            <div style={s.builtWith}>
-              <span style={s.builtLabel}>Built with</span>
-              <div style={s.builtRow}>
-                <span style={s.techPill}>Claude AI</span>
-                <span style={s.techPill}>React</span>
-                <span style={s.techPill}>Node.js</span>
-                <span style={s.techPill}>FastAPI</span>
-                <span style={s.techPill}>MongoDB</span>
-              </div>
-            </div>
           </div>
 
           {/* Form side */}
@@ -122,6 +111,23 @@ export default function Contact() {
                 {submitted ? 'MESSAGE SENT!' : 'SEND MESSAGE →'}
               </button>
             </form>
+          </div>
+        </div>
+
+        {/* Map */}
+        <div style={s.mapSection}>
+          <h2 style={s.mapTitle}>FIND US</h2>
+          <div style={s.mapWrap}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3611.812086498498!2d84.85196!3d25.5359!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x398d57!2sIIT%20Patna!5e0!3m2!1sen!2sin"
+              width="100%"
+              height="350"
+              style={{ border: 0, borderRadius: '20px' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="IIT Patna"
+            />
           </div>
         </div>
       </div>
@@ -210,36 +216,22 @@ const s = {
     color: '#818cf8',
     textDecoration: 'none',
   },
-  builtWith: {
-    padding: 'var(--space-5) var(--space-6)',
-    background: '#161616',
-    borderRadius: '20px',
-    border: '1px solid rgba(255,255,255,0.06)',
-    marginTop: 'var(--space-2)',
+  mapSection: {
+    marginTop: 'clamp(40px, 6vw, 60px)',
   },
-  builtLabel: {
-    fontSize: 'var(--fs-xs)',
-    color: 'rgba(255,255,255,0.35)',
+  mapTitle: {
+    fontFamily: "'Inter', 'system-ui', sans-serif",
+    fontSize: 'var(--fs-2xl)',
+    fontWeight: 900,
+    color: '#fff',
     textTransform: 'uppercase',
-    letterSpacing: '0.08em',
-    fontWeight: 600,
-    display: 'block',
-    marginBottom: 'var(--space-3)',
+    letterSpacing: '-0.02em',
+    marginBottom: 'var(--space-4)',
   },
-  builtRow: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: 'var(--space-2)',
-  },
-  techPill: {
-    padding: '6px 14px',
-    fontSize: 'var(--fs-xs)',
-    fontWeight: 700,
-    color: 'rgba(255,255,255,0.7)',
-    background: 'rgba(255,255,255,0.06)',
-    borderRadius: '60px',
-    border: '1px solid rgba(255,255,255,0.08)',
-    letterSpacing: '0.02em',
+  mapWrap: {
+    borderRadius: '20px',
+    overflow: 'hidden',
+    border: '1px solid rgba(255,255,255,0.06)',
   },
   formCard: {
     background: '#161616',
