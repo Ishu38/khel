@@ -4,6 +4,7 @@ build/
 .env
 .env.*
 !.env.example
+!client/.env.production
 __pycache__/
 *.pyc
 .venv/

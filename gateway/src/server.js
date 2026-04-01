@@ -32,6 +32,7 @@ const allowedOrigins = [
   'https://khel-psi.vercel.app',
   'https://khel-mu-lac.vercel.app',
   'https://client-mu-lac.vercel.app',
+  'https://client-9n4y3faaf-roychinu45-5523s-projects.vercel.app',
   process.env.ALLOWED_ORIGINS?.split(',') || []
 ].filter(Boolean);
 
