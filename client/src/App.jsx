@@ -37,6 +37,8 @@ export default function App() {
         <main style={{ flex: 1, minHeight: 'calc(100vh - var(--nav-height))' }}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/explore" element={<Explore />} />
             <Route path="/create" element={<ProtectedRoute><Create /></ProtectedRoute>} />
             <Route path="/editor" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
