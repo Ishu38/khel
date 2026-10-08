@@ -15,3 +15,8 @@ coverage/
 *.log
 .DS_Store
 thumbs.db
+
+# Local tooling (HyperFrames skills install, agent dirs)
+.agents/
+.claude/
+skills-lock.json
