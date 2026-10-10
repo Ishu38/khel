@@ -1,0 +1,171 @@
+{
+  "title": "Linguistics: The Science of Your Superpower",
+  "voice": "af_heart",
+  "lang": "en-us",
+  "speed": 0.95,
+  "scenes": [
+    {
+      "id": "hook",
+      "lines": [
+        { "t": "Right now, as you listen to me, your brain is doing something incredible." },
+        { "t": "It's turning vibrations in the air into meaning. Instantly." },
+        { "t": "You learned to do this before you could tie your shoes, and nobody gave you a rulebook." },
+        { "t": "The science that studies this superpower is called linguistics." }
+      ]
+    },
+    {
+      "id": "what",
+      "lines": [
+        { "t": "Linguistics is the scientific study of human language." },
+        { "t": "And here's a common myth: a linguist is not just someone who speaks twenty languages. That's a polyglot." },
+        { "t": "A linguist asks how language works, the way a biologist studies life instead of collecting pets." }
+      ]
+    },
+    {
+      "id": "ladder",
+      "lines": [
+        { "t": "Language is built in layers, like a ladder." },
+        { "t": "Sounds make words. Words make sentences. Sentences carry meaning. And meaning depends on context." },
+        { "t": "Let's climb." }
+      ]
+    },
+    {
+      "id": "phonetics",
+      "lines": [
+        { "t": "Step one: phonetics, the study of speech sounds." },
+        { "t": "Try this. Put your hand on your throat and say, sssss." },
+        { "t": "Now say, zzzzz." },
+        { "t": "Feel that buzz? That's your vocal cords vibrating. It's the only difference between an S and a Z." }
+      ]
+    },
+    {
+      "id": "phonology",
+      "lines": [
+        { "t": "Step two: phonology, how a language organises its sounds." },
+        { "t": "Hold a sheet of paper in front of your mouth, and say these two Hindi words." },
+        { "parts": [{ "t": "पल", "voice": "hf_alpha", "lang": "hi" }], "cap": "पल (pal) — moment" },
+        { "parts": [{ "t": "फल", "voice": "hf_alpha", "lang": "hi" }], "cap": "फल (phal) — fruit" },
+        { "t": "The paper flutters on the second word. That tiny puff of air changes the meaning in Hindi, but an English speaker barely notices it." }
+      ]
+    },
+    {
+      "id": "morphology",
+      "lines": [
+        { "t": "Step three: morphology, how words are built." },
+        { "t": "Take the word unbelievable. It's really three pieces: un, meaning not. Believe. And able." },
+        { "t": "Linguists call these meaningful pieces morphemes." },
+        { "t": "Some languages, like Turkish, can pack a whole English sentence into a single long word." }
+      ]
+    },
+    {
+      "id": "syntax",
+      "lines": [
+        { "t": "Step four: syntax, how words combine into sentences." },
+        { "t": "The linguist Noam Chomsky wrote this famous sentence." },
+        { "t": "Colorless green ideas sleep furiously." },
+        { "t": "It makes no sense at all, and yet your brain knows it's perfectly grammatical." },
+        { "t": "So grammar and meaning are separate systems in your mind." }
+      ]
+    },
+    {
+      "id": "semantics",
+      "lines": [
+        { "t": "Step five: semantics, the study of meaning." },
+        { "t": "I saw the man with the telescope." },
+        { "t": "Who has the telescope? You, or the man?" },
+        { "t": "One sentence, two meanings. That's called ambiguity." }
+      ]
+    },
+    {
+      "id": "pragmatics",
+      "lines": [
+        { "t": "Step six: pragmatics, meaning in context." },
+        { "t": "When someone asks, can you pass the salt?" },
+        { "t": "Nobody replies, yes I can, and just sits there." },
+        { "t": "We understand what people intend, not only what they literally say." }
+      ]
+    },
+    {
+      "id": "family",
+      "lines": [
+        { "t": "Languages also come in families. Look at the word for three." },
+        { "t": "English: three." },
+        { "parts": [{ "t": "Hindi:" }, { "t": "तीन", "voice": "hf_alpha", "lang": "hi" }], "cap": "Hindi: तीन (teen)" },
+        { "t": "Sanskrit: tri. Latin: tres. Russian: tri." },
+        { "t": "That's no coincidence. In 1786, Sir William Jones noticed that Sanskrit, Greek and Latin must share a common ancestor." },
+        { "t": "Today we call that family Indo-European." }
+      ]
+    },
+    {
+      "id": "panini",
+      "lines": [
+        { "t": "But more than two thousand years earlier, the Indian scholar Panini wrote about four thousand precise rules describing Sanskrit grammar." },
+        { "t": "His work is one of the greatest achievements in the history of linguistics, and computer scientists still admire its almost algorithmic design." }
+      ]
+    },
+    {
+      "id": "babies",
+      "lines": [
+        { "t": "So how do children learn all this?" },
+        { "t": "Babies are universal listeners. At six months, they can hear differences between sounds from every language on Earth." },
+        { "t": "By their first birthday, they tune in to the sounds of their own language." },
+        { "t": "And children don't just copy. A child who says, I goed, or two mouses, has never heard those words." },
+        { "t": "They've discovered a rule, and applied it a little too well." }
+      ]
+    },
+    {
+      "id": "nicaragua",
+      "lines": [
+        { "t": "In the 1980s, deaf children at new schools in Nicaragua went even further." },
+        { "t": "They created a brand-new sign language, with its own complete grammar." },
+        { "t": "Sign languages, like Indian Sign Language, are full languages, not just gestures." }
+      ]
+    },
+    {
+      "id": "identity",
+      "lines": [
+        { "t": "Language is also about identity. Many of us switch languages in the middle of a sentence." },
+        { "parts": [{ "t": "मैं कल कॉलेज नहीं आ रहा,", "voice": "hf_alpha", "lang": "hi" }, { "t": "I have a test." }], "cap": "\"Main kal college nahi aa raha, I have a test.\"" },
+        { "t": "That's called code-switching, and it's a skill, not a mistake." },
+        { "t": "Linguists describe how people really speak. Every dialect follows its own consistent rules, so no dialect is wrong." }
+      ]
+    },
+    {
+      "id": "thought",
+      "lines": [
+        { "t": "Can language shape how we think?" },
+        { "t": "Speakers of Guugu Yimithirr, in Australia, don't say left or right. They say things like, there's an ant on your north leg." },
+        { "t": "And so they always know which way is north, even indoors." },
+        { "t": "Language doesn't cage our thoughts, but it can train our attention." }
+      ]
+    },
+    {
+      "id": "endangered",
+      "lines": [
+        { "t": "Today, about seven thousand languages are spoken on Earth." },
+        { "t": "India alone is home to hundreds of them, from Hindi and Tamil to Santali and Nihali." },
+        { "t": "But around forty percent of the world's languages are endangered." },
+        { "t": "When the last speaker of a language is gone, a unique way of seeing the world disappears with them." }
+      ]
+    },
+    {
+      "id": "careers",
+      "lines": [
+        { "t": "Linguistics is everywhere." },
+        { "t": "It powers voice assistants, translation apps and AI chatbots." },
+        { "t": "It helps speech therapists, teachers, dictionary makers, and even detectives." },
+        { "t": "And in India, projects like Bhashini are building technology for every Indian language." }
+      ]
+    },
+    {
+      "id": "outro",
+      "lines": [
+        { "t": "Every language is a different answer to the same question: how do humans share what's in their minds?" },
+        { "t": "So here's your challenge. Ask a grandparent for one word from your home language that has no English translation." },
+        { "t": "Share it, and help keep it alive." },
+        { "t": "Because every time you speak, you're using the most amazing tool humans have ever created." }
+      ],
+      "tail": 3.5
+    }
+  ]
+}
